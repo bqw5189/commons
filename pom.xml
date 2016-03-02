@@ -31,19 +31,19 @@
         <dubbo_version>2.8.4</dubbo_version>
     </properties>
 
-    <distributionManagement>
-          <repository>
-              <id>user-release</id>
-              <name>User Project Release</name>
-              <url>http://101.201.196.29:8081/repository/maven-releases/</url>
-          </repository>
+    <!--<distributionManagement>-->
+          <!--<repository>-->
+              <!--<id>user-release</id>-->
+              <!--<name>User Project Release</name>-->
+              <!--<url>http://101.201.196.29:8081/repository/maven-releases/</url>-->
+          <!--</repository>-->
 
-          <snapshotRepository>
-              <id>user-snapshots</id>
-              <name>User Project SNAPSHOTS</name>
-              <url>http://101.201.196.29:8081/repository/maven-snapshots/</url>
-          </snapshotRepository>
-      </distributionManagement>
+          <!--<snapshotRepository>-->
+              <!--<id>user-snapshots</id>-->
+              <!--<name>User Project SNAPSHOTS</name>-->
+              <!--<url>http://101.201.196.29:8081/repository/maven-snapshots/</url>-->
+          <!--</snapshotRepository>-->
+      <!--</distributionManagement>-->
 
     <dependencyManagement>
         <dependencies>

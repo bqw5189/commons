@@ -14,6 +14,19 @@
         <param-value>/WEB-INF/classes/META-INF/spring/applicationContext.xml,/WEB-INF/classes/META-INF/spring/dubbo-commons-joint-provider.xml</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>resteasy.servlet.mapping.prefix</param-name>
+        <param-value>/api-doc</param-value>
+    </context-param>
+
+    <filter>
+        <filter-name>ApiOriginFilter</filter-name>
+        <filter-class>cn.riilservice.joint.commons.v2.util.ApiOriginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ApiOriginFilter</filter-name>
+        <url-pattern>/api-doc/*</url-pattern>
+    </filter-mapping>
 
     <!--this listener must be defined before the spring listener-->
     <listener>
@@ -30,8 +43,34 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>resteasy</servlet-name>
+        <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>cn.riilservice.joint.commons.v2.servlet.PetStoreApplication</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+
+    <servlet>
+        <servlet-name>Bootstrap</servlet-name>
+        <servlet-class>cn.riilservice.joint.commons.v2.servlet.Bootstrap</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/api/v2/*</url-pattern>
     </servlet-mapping>
+
+
+
+    <servlet-mapping>
+        <servlet-name>resteasy</servlet-name>
+        <url-pattern>/api-doc/*</url-pattern>
+    </servlet-mapping>
+
+
 </web-app>

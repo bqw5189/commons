@@ -15,6 +15,7 @@
  */
 package cn.riilservice.joint.commons.v2.extension;
 
+import cn.riilservice.joint.commons.v2.exception.ApiException;
 import com.alibaba.dubbo.rpc.RpcException;
 import com.alibaba.dubbo.rpc.protocol.rest.RestConstraintViolation;
 import com.alibaba.dubbo.rpc.protocol.rest.ViolationReport;
@@ -41,9 +42,17 @@ public class CustomExceptionMapper implements ExceptionMapper<RpcException> {
         if (e.getCause() instanceof ConstraintViolationException) {
             return handleConstraintViolationException((ConstraintViolationException) e.getCause());
         }
+        if (e.getCause() instanceof ApiException) {
+            return handleApiException((ApiException) e.getCause());
+        }
+
         // we may want to avoid exposing the dubbo exception details to certain clients
         // TODO for now just do plain text output
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal server error: " + e.getMessage()).type(ContentType.TEXT_PLAIN_UTF_8).build();
+    }
+
+    protected Response handleApiException(ApiException apiException) {
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(apiException).type(ContentType.APPLICATION_JSON_UTF_8).build();
     }
 
     protected Response handleConstraintViolationException(ConstraintViolationException cve) {

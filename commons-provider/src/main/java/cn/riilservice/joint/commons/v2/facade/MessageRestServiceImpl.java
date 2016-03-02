@@ -1,9 +1,12 @@
 package cn.riilservice.joint.commons.v2.facade;
 
+import cn.riilservice.joint.commons.v2.exception.ApiException;
+import cn.riilservice.joint.commons.v2.exception.NotFoundException;
 import cn.riilservice.joint.commons.v2.service.MessageService;
+import io.swagger.annotations.ApiParam;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.ws.rs.PathParam;
 
@@ -22,12 +25,14 @@ public class MessageRestServiceImpl implements MessageRestService {
         return messageService;
     }
 
+
     public void setMessageService(MessageService messageService) {
         this.messageService = messageService;
     }
 
+
     @Override
-    public RestResult send(@PathParam("phone_number") String phoneNumber, @RequestParam("content")String content) {
+    public RestResult send(@ApiParam(value = "手机号", required = true) @NotEmpty(message = "电话不能为空") String phoneNumber, @ApiParam(value = "短信内容", required = true) @NotEmpty(message = "短信内容不能为空") String content) {
         logger.debug("phone_number:{}, content:{}", phoneNumber,content);
         return RestResult.OK(messageService.send(phoneNumber, content));
     }
@@ -38,7 +43,12 @@ public class MessageRestServiceImpl implements MessageRestService {
     }
 
     @Override
-    public RestResult verificationCode(@PathParam("phone_number") String phoneNumber, @PathParam("check_code") String checkCode) {
-        return RestResult.OK(messageService.verificationCode(phoneNumber, checkCode));
+    public RestResult verificationCode(@ApiParam(value = "手机号", required = true) @NotEmpty String phoneNumber, @ApiParam(value = "验证码", required = true) @NotEmpty String verificationCode) throws ApiException {
+        if (phoneNumber.length() < 11) {
+            throw new NotFoundException(400, "无效手机号");
+        }else {
+        return RestResult.OK(messageService.verificationCode(phoneNumber, verificationCode));
+        }
     }
+
 }
